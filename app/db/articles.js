@@ -1,14 +1,15 @@
-const Pool = require("pg").Pool
-const pool = new Pool({
+const { Client } = require("pg")
+const client = new Client({
   user: "frey",
   host: "localhost",
   database: "cdb",
   password: "123456",
   port: 5432
 })
+client.connect()
 
 const getArticles = (req, res) => {
-  pool.query("SELECT * FROM articles ORDER BY id DESC", (err, results) => {
+  client.query("SELECT * FROM articles ORDER BY id DESC", (err, results) => {
     if (err)
       throw(err)
     
@@ -19,7 +20,7 @@ const getArticles = (req, res) => {
 const getArticlesById = (req, res) => {
   const id = parseInt(req.params.id);
 
-  pool.query("SELECT * FROM articles WHERE id = $1", [id], (err, results) => {
+  client.query("SELECT * FROM articles WHERE id = $1", [id], (err, results) => {
     if (err)
       throw (err)
     
@@ -30,7 +31,7 @@ const getArticlesById = (req, res) => {
 const createArticle = (req, res) => {
   const { title, content } = req.body;
 
-  pool.query("INSERT INTO articles (title, content) VALUES ($1, $2)", [title, content], (err, results) => {
+  client.query("INSERT INTO articles (title, content) VALUES ($1, $2)", [title, content], (err, results) => {
     if (err)
       throw(err)
     

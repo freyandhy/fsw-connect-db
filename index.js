@@ -1,8 +1,10 @@
 const express = require("express")
 const bodyParser = require("body-parser")
 const app = express();
-const db = require("./queries")
 const port = 3030
+
+const routeAuthors = require("./app/routes/authors")
+const routeArticles = require("./app/routes/articles")
 
 // parse application/json
 app.use(bodyParser.json())
@@ -13,8 +15,7 @@ app.get("/", (req, res) => {
   res.json("Simple RESTful API with NodeJs, ExpressJs, and Postgres")
 })
 
-app.get("/api/v1/articles", db.getArticles)
-app.get("/api/v1/articles/:id", db.getArticlesById)
-app.post("/api/v1/articles", db.createArticle)
+app.use(routeAuthors);
+app.use(routeArticles);
 
 app.listen(port, () => console.log(`Server is ready, at port ${port}!`))
